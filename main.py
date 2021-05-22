@@ -1,6 +1,29 @@
+import random
+
+
 class SmallDeck:
     def __init__(self):
         self.cards = [6, 7, 8, 9, 10, 'Jack', 'Lady', 'King', 'Ace'] * 4
+
+    def shuffle(self):
+        random.shuffle(self.cards)
+        return self.cards
+
+    def card_value(self):
+        values = {}
+        for i in set(self.cards):
+            if type(i) == int:
+                values[i] = i
+            elif i == 'Ace':
+                values[i] = 11
+            else:
+                values[i] = 10
+        return values
+
+    def take_card(self):
+        card = self.shuffle().pop(0)
+        value = self.card_value()[card]
+        return card, value
 
 
 class BigDeck(SmallDeck):
