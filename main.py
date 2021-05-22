@@ -35,4 +35,18 @@ class BigDeck(SmallDeck):
         self.cards.extend(self.addition)
 
 
+def choose_deck():
+    choose = input(
+                   'Choose deck to play:\n'
+                   '1 - Small deck 36 cards\n'
+                   '2 - Big deck 52 cards\n\n'
+                   'ENTER: '
+                   )
 
+    if choose == '1':
+        return SmallDeck()
+    elif choose == '2':
+        return BigDeck()
+    else:
+        print('Wrong input, try again')
+        return choose_deck()
