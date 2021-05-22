@@ -27,7 +27,6 @@ class SmallDeck:
 
 
 class BigDeck(SmallDeck):
-
     addition = [2, 3, 4, 5] * 4
 
     def __init__(self):
@@ -39,11 +38,11 @@ class BigDeck(SmallDeck):
 
 def choose_deck():
     choose = input(
-                   'Choose deck to play:\n'
-                   '1 - Small deck 36 cards\n'
-                   '2 - Big deck 52 cards\n\n'
-                   'ENTER: '
-                   )
+        'Choose deck to play:\n'
+        '1 - Small deck 36 cards\n'
+        '2 - Big deck 52 cards\n\n'
+        'ENTER: '
+    )
 
     if choose == '1':
         return SmallDeck()
@@ -52,5 +51,39 @@ def choose_deck():
     else:
         print('\nWrong input, try again\n')
         return choose_deck()
+
+
+def game_mode():
+    mode = input(
+                'Choose game mode:\n'
+                '1 - Single player\n'
+                '2 - Multiplayer\n'
+                '3 - Single player against computer player\n'
+                )
+
+    if mode == '1':
+        players_number = 1
+        return players_number
+    elif mode == '2':
+        return multi()
+    elif mode == '3':
+        players_number = 0
+        return players_number
+    else:
+        return 'Wrong input'
+
+
+def multi():
+    try:
+        players_number = int(input('Enter number of players (max - 15): \n'))
+    except ValueError:
+        print('Wrong input')
+        return multi()
+
+    if players_number <= 15:
+        return players_number
+    else:
+        print('Maximum number of players is 15, try again')
+        return multi()
 
 
