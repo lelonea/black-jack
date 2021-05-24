@@ -1,4 +1,4 @@
-import random
+from random import shuffle
 
 
 class SmallDeck:
@@ -12,14 +12,11 @@ class SmallDeck:
                 self.values[i] = 11
             else:
                 self.values[i] = 10
-
-    def shuffle(self):
-        random.shuffle(self.cards)
-        return self.cards
+        shuffle(self.cards)
 
     def take_card(self):
         try:
-            card = self.shuffle().pop(0)
+            card = self.cards.pop(0)
             value = self.values[card]
         except IndexError:
             return 'Deck is empty'
@@ -35,13 +32,8 @@ class BigDeck(SmallDeck):
         for i in set(self.addition):
             self.values[i] = i
 
-
-class Game:
-    def __init__(self):
-        self.deck = self.choose_deck()
-        self.mode = self.game_mode()
-
-    def choose_deck(self):
+    @staticmethod
+    def choose_deck():
         choose = input(
             'Choose deck to play:\n'
             '1 - Small deck 36 cards\n'
@@ -55,7 +47,45 @@ class Game:
             return BigDeck()
         else:
             print('\nWrong input, try again\n')
-            return self.choose_deck()
+            return BigDeck.choose_deck()
+
+
+class AllPlayers:
+    deck = BigDeck.choose_deck()
+    players_list = []
+
+    def __init__(self, name):
+        self.name = name
+        self.players_list.append(self.name)
+        self.cards = [self.deck.take_card(), self.deck.take_card()]
+        self.position = None
+
+    def ask_card(self, deck):
+        card = deck.take_card()
+        self.cards.append(card)
+
+
+class Bot(AllPlayers):
+    pass
+
+
+class Player(AllPlayers):
+    pass
+
+
+class Game:
+    def __init__(self):
+        self.players_number = 1
+        self.players = []
+        self.players_names = []
+
+    def start_game(self):
+        while self.players_number > 0:
+            inp_name = input("Enter player's name: ")
+            self.players_names.append(inp_name)
+            inp_name = Player(inp_name)
+            self.players.append(inp_name)
+            self.players_number -= 1
 
     def game_mode(self):
         mode = input(
@@ -67,42 +97,29 @@ class Game:
         )
 
         if mode == '1':
-            players_number = 1
-            return players_number
+            self.players_number = 1
         elif mode == '2':
             return self.multi()
         elif mode == '3':
-            players_number = 0
-            return players_number
+            self.players_number = 1
+            b = Bot('Bot')
+            self.players.append(b)
         else:
             return 'Wrong input'
 
     def multi(self):
         try:
-            players_number = int(input('Enter number of players (max - 15): \n'))
+            self.players_number = int(input('Enter number of players (max - 6): \n'))
         except ValueError:
             print('Wrong input')
             return self.multi()
 
-        if players_number <= 15:
-            return players_number
+        if self.players_number <= 6:
+            return self.players_number
         else:
-            print('Maximum number of players is 15, try again')
+            print('Maximum number of players is 6, try again')
             return self.multi()
 
 
-class Player:
-    players_list = []
-    game = Game()
-    deck_to_play = game.deck
-    player_number = game.mode
-
-    def __init__(self, name='Name'):
-        self.name = name
-        self.players = self.players_list.append(self.name)
-        self.cards_in_hand = [self.deck_to_play.take_card(), self.deck_to_play.take_card()]
-
-    def take_card(self):
-        self.cards_in_hand.append(self.deck_to_play.take_card())
 
 
